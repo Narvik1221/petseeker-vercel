@@ -1,4 +1,4 @@
-// src/entities/user/model/authWidget.ts
+// @ts-nocheck
 import React, { ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import {

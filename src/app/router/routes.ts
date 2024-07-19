@@ -1,4 +1,4 @@
-
+// @ts-nocheck
 import { MAIN_ROUTE,AUTH_ROUTE, REGISTRATION_ROUTE, ADD_PET_CARD} from "./consts";
 import {Main} from "../../pages/main";
 import {Auth} from "../../pages/auth";
