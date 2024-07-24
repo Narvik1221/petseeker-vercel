@@ -1,4 +1,4 @@
-// @ts-nocheck
+// src/entities/user/model/authWidget.ts
 import React, { ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -21,6 +21,9 @@ import { Text } from "@shared/ui/text";
 import { ConfirmForm } from "./confirmForm/ConfirmForm";
 import { AuthForm } from "./authForm/AuthForm";
 import { match } from "ts-pattern";
+
+
+
 export const AuthWidget: React.FC = () => {
   const { t } = useTranslation("authWidget");
   const navigate = useNavigate();
@@ -55,7 +58,6 @@ export const AuthWidget: React.FC = () => {
       console.error("Failed to confirm", err);
     }
   };
-
   const handleChangePhone = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     const onlyNumbers = value.replace(/\D/g, "");

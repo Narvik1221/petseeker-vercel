@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import { Pet, PetCard } from "../../../entities/pet";
 import { useGetPetsQuery } from "../../../entities/pet";
@@ -10,7 +9,6 @@ export const PetList: React.FC = () => {
 
   return (
     <div className={styles.container}>
-
       {match({ isLoading, isError, pets })
         .with({ isLoading: true }, () => <div>Loading...</div>)
         .with({ isError: true }, () => <div>Error: </div>)

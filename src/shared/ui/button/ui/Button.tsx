@@ -8,7 +8,6 @@ type ButtonProps = {
   isDefault?: boolean;
 };
 
-
 export const Button: React.FC<ButtonProps> = ({
   onClick,
   children,
