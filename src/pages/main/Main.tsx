@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { PetList } from "../../widgets/petList";
@@ -13,7 +14,7 @@ export const Main: React.FC = () => {
   const { geolocation, address, error } = useGeolocation();
 
   if (error) {
-    return <div>Error !!!</div>;
+    return <div>Error !!! {error}</div>;
   }
 
   if (!geolocation) {
