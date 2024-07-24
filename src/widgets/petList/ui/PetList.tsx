@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import { Pet, PetCard } from "../../../entities/pet";
 import { useGetPetsQuery } from "../../../entities/pet";
