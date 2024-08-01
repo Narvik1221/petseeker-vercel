@@ -1,10 +1,15 @@
 import { useMemo } from "react";
 import { format } from "date-fns";
-import { ru } from "date-fns/locale";
+import { monthsInGenitive } from "../../constants/useFormattedDateConsts";
+
 const useFormattedDate = (isoDate: string) => {
   const formattedDate = useMemo(() => {
     const date = new Date(isoDate);
-    return `${format(date, "d")} ${format(date, "LLLL", { locale: ru })} ${format(date, "HH:mm")}`;
+    const day = format(date, "d");
+    const month = monthsInGenitive[date.getMonth()];
+    const time = format(date, "HH:mm");
+
+    return `${day} ${month} ${time}`;
   }, [isoDate]);
 
   return formattedDate;

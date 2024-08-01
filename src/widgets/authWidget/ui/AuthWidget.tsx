@@ -1,16 +1,25 @@
+// src/entities/user/model/authWidget.ts
 import React, { ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
-import * as petModel from "@entities/user/index";
-
-import { useAppDispatch, useAppSelector } from "@shared/hooks";
-
-import { Button } from "@shared/ui/button";
+import {
+  useLoginMutation,
+  useConfirmMutation,
+} from "../../../entities/user/index";
+import { useAppDispatch, useAppSelector } from "../../../shared/hooks";
+import {
+  setToken,
+  setPhoneNumber,
+  setName,
+  setCode,
+  setIsConfirm,
+} from "../../../entities/user/index";
+import { Button } from "../../../shared/ui/button";
 import {
   AUTH_ROUTE,
   MAIN_ROUTE,
   REGISTRATION_ROUTE,
   PROFILE,
-} from "@app/router/consts";
+} from "../../../app/router/consts";
 import styles from "./auth.module.scss";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Text } from "@shared/ui/text";
@@ -26,20 +35,20 @@ export const AuthWidget: React.FC = () => {
   const name = useAppSelector((state) => state.user.name);
   const code = useAppSelector((state) => state.user.code);
   const isConfirm = useAppSelector((state) => state.user.isConfirm);
-  const [login, { isLoading: isSendingLogin }] =
-    petModel.api.useLoginMutation();
+  const [login, { isLoading: isSendingLogin }] = useLoginMutation();
   const [
     confirm,
     { isLoading: isSendingConfirm, isSuccess: isConfirmSuccess, isError },
-  ] = petModel.api.useConfirmMutation();
+  ] = useConfirmMutation();
   const isAuth = location.pathname === AUTH_ROUTE;
 
   const handleClickSubmit = async () => {
     try {
       const response = await login({ phone_number: phoneNumber }).unwrap();
-
+      console.log(response);
+      console.log({ phone_number: phoneNumber });
       if (response.success) {
-        dispatch(petModel.slice.setIsConfirm(true));
+        dispatch(setIsConfirm(true));
       }
     } catch (err) {
       console.error("Failed to login", err);
@@ -48,6 +57,10 @@ export const AuthWidget: React.FC = () => {
 
   const handleClickConfirm = async () => {
     try {
+      console.log({
+        phone_number: phoneNumber,
+        code: code,
+      });
       const response = await confirm({
         phone_number: phoneNumber,
         code: code,
@@ -63,17 +76,17 @@ export const AuthWidget: React.FC = () => {
   const handleChangePhone = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     const onlyNumbers = value.replace(/\D/g, "");
-    dispatch(petModel.slice.setPhoneNumber(onlyNumbers));
+    dispatch(setPhoneNumber(onlyNumbers));
   };
 
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
-    dispatch(petModel.slice.setName(event.target.value));
+    dispatch(setName(event.target.value));
   };
 
   const handleChangeCode = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     const masked = value.replace(/\D/g, "");
-    dispatch(petModel.slice.setCode(masked));
+    dispatch(setCode(masked));
   };
 
   return (

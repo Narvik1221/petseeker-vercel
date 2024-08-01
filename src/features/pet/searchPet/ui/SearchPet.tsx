@@ -1,8 +1,8 @@
 import React, { ChangeEvent, useState } from "react";
-import * as petModel from "@entities/pet/index";
-import { Input } from "@/shared/ui/input";
-import { Button } from "@shared/ui/button";
-import searchIcon from "@shared/assets/search_icon.svg";
+import { useGetPetsQuery } from "../../../../entities/pet/index";
+import { Input } from "../../../../shared/ui/input";
+import { Button } from "../../../../shared/ui/button";
+import searchIcon from "../../../../shared/assets/search_icon.svg";
 import styles from "./searchPet.module.scss";
 import { useTranslation } from "react-i18next";
 export const SearchPet: React.FC = () => {
@@ -13,7 +13,7 @@ export const SearchPet: React.FC = () => {
     name?: string;
   }>({});
 
-  petModel.api.useGetPetsQuery(searchParams);
+  useGetPetsQuery(searchParams);
 
   const handleSearch = () => {
     setSearchParams({
@@ -33,17 +33,19 @@ export const SearchPet: React.FC = () => {
   };
 
   return (
-    <div className={styles.search_container}>
-      <button onClick={handleSearch} className={styles.search_btn}></button>
-      <input
-        placeholder={placeholder}
-        className={styles.search_input}
-        value={name}
-        onChange={handleChangeName}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-      />
-      <button className={styles.search_filter}></button>
-    </div>
+ 
+      <div className={styles.search_container}>
+        <button onClick={handleSearch} className={styles.search_btn}></button>
+        <input
+          placeholder={placeholder}
+          className={styles.search_input}
+          value={name}
+          onChange={handleChangeName}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+        />
+        <button className={styles.search_filter}></button>
+      </div>
+
   );
 };

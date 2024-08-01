@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./button.module.scss";
-export type ButtonProps = {
+type ButtonProps = {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   children?: React.ReactNode;
   type?: "button" | "submit" | "reset";

@@ -1,5 +1,5 @@
-export { PetCard } from "./ui/PetCard";
-export { default as petsReducer } from "./model/slice";
-export * as slice from "./model/slice";
-export * as api from "./api/api";
-export * as type from "./model/type";
+export * from "./ui/PetCard.tsx";
+export { default as petsReducer } from "./model/petsSlice.ts";
+export * from "./model/petsSlice.ts";
+export * from "./api/petsApi.ts";
+export * from "./model/petType.ts";
