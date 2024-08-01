@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import { useParams } from "react-router-dom";
 import styles from "./petCardDetail.module.scss";
@@ -8,20 +7,25 @@ import { NavLink } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
-import { Button } from "../../../shared/ui/button";
-import { Text } from "../../../shared/ui/text";
-import { ReactComponent as GenderFemale } from "../../../shared/assets/gender_female_icon.svg";
-import { ReactComponent as GenderMale } from "../../../shared/assets/gender_male_icon.svg";
-import { ReactComponent as Like } from "../../../shared/assets/like.svg";
-import { ReactComponent as Back } from "../../../shared/assets/back_arrow_icon.svg";
-import { ReactComponent as Birthday } from "../../../shared/assets/birthday.svg";
-import { ReactComponent as Home } from "../../../shared/assets/home.svg";
-import { ReactComponent as ShelterArrow } from "../../../shared/assets/shelter_link_arrow.svg";
-import { useGetPetDetailQuery } from "../../../entities/pet";
+import { Text } from "@shared/ui/text";
+import { ReactComponent as GenderFemale } from "@shared/assets/gender_female_icon.svg";
+import { ReactComponent as GenderMale } from "@shared/assets/gender_male_icon.svg";
+import { ReactComponent as Like } from "@shared/assets/like.svg";
+import { ReactComponent as Back } from "@shared/assets/back_arrow_icon.svg";
+import { ReactComponent as Birthday } from "@shared/assets/birthday.svg";
+import { ReactComponent as Home } from "@shared/assets/home.svg";
+import { ReactComponent as ShelterArrow } from "@shared/assets/shelter_link_arrow.svg";
+import * as petModel from "@entities/pet";
+import test from "@shared/assets/add_icon.svg";
+import { SaveCard } from "@features/pet/savePet";
 import { match } from "ts-pattern";
 export const PetCardDetail: React.FC = () => {
-  let { id } = useParams();
-  const { data: pet, isLoading, isError } = useGetPetDetailQuery({ id });
+  const { id } = useParams();
+  const {
+    data: pet,
+    isLoading,
+    isError,
+  } = petModel.api.useGetPetDetailQuery({ id });
   const navigate = useNavigate();
   return (
     <>
@@ -40,12 +44,12 @@ export const PetCardDetail: React.FC = () => {
               </button>
               <div className={styles.title}>
                 <Text myClass="subtitle" color="white">
-                  Рыжуля
+                  {pet.name}
                 </Text>
               </div>
               <div className={styles.icons}>
                 <span className={styles.icon}>
-                  {pet.male ? <GenderMale /> : <GenderFemale />}
+                  {pet.gender ? <GenderMale /> : <GenderFemale />}
                 </span>
                 <span className={styles.icon}>
                   <Like className={styles.like} />
@@ -54,7 +58,7 @@ export const PetCardDetail: React.FC = () => {
             </div>
             <div className={styles.imageContainer}>
               <span className={styles.status}>
-                <Text color="white">В приюте</Text>
+                <Text color="white">{pet.status}</Text>
               </span>
 
               <Swiper
@@ -63,13 +67,23 @@ export const PetCardDetail: React.FC = () => {
                 modules={[Pagination]}
                 pagination={{ clickable: true }}
               >
-                {pet.images?.map((image) => (
+                {/* {pet.images?.map((image) => (
                   <SwiperSlide>
                     <div className={styles.slide_container}>
                       <img src={image} alt={image} />
                     </div>
                   </SwiperSlide>
-                ))}
+                ))} */}
+                <SwiperSlide>
+                  <div className={styles.slide_container}>
+                    <img src={test} alt={test} />
+                  </div>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <div className={styles.slide_container}>
+                    <img src={test} alt={test} />
+                  </div>
+                </SwiperSlide>
               </Swiper>
             </div>
             <div className={styles.info}>
@@ -82,7 +96,7 @@ export const PetCardDetail: React.FC = () => {
                   {" "}
                   <div className={styles.navbar__item}>
                     <Text myClass="medium" color="white">
-                      Возраст: <div>1 год</div>
+                      Возраст: <div>{pet.age} год</div>
                     </Text>
                   </div>{" "}
                 </SwiperSlide>
@@ -90,7 +104,7 @@ export const PetCardDetail: React.FC = () => {
                   {" "}
                   <div className={styles.navbar__item}>
                     <Text myClass="medium" color="white">
-                      Порода: <div>Не определено</div>
+                      Порода: <div>{pet.breed}</div>
                     </Text>
                   </div>{" "}
                 </SwiperSlide>
@@ -98,7 +112,7 @@ export const PetCardDetail: React.FC = () => {
                   {" "}
                   <div className={styles.navbar__item}>
                     <Text myClass="medium" color="white">
-                      Прививки: <div>Есть</div>
+                      Прививки: <div>{pet.vaccinations ? "Есть" : "Нет"}</div>
                     </Text>
                   </div>{" "}
                 </SwiperSlide>
@@ -106,7 +120,7 @@ export const PetCardDetail: React.FC = () => {
                   {" "}
                   <div className={styles.navbar__item}>
                     <Text myClass="medium" color="white">
-                      Прививки: <div>Есть</div>
+                      Состояние здоровья: <div>{pet.health_issues}</div>
                     </Text>
                   </div>{" "}
                 </SwiperSlide>
@@ -147,9 +161,7 @@ export const PetCardDetail: React.FC = () => {
               <Text myClass="subtitle">Обо мне</Text>
               <div className={styles.text_content}>
                 <Text myClass="medium" color="gray">
-                  Маленького котенка по имени Рыжуля нашли на улице, забитого
-                  дождем и голодом. Теперь он находится под нашей опекой,
-                  окружен любовью и заботой. Рыжуля ищет свой дом...
+                  {pet.description}
                 </Text>
               </div>
               <button className={styles.more}>
@@ -158,7 +170,7 @@ export const PetCardDetail: React.FC = () => {
                 </Text>
               </button>
               <div className={styles.m_top}>
-                <Button>Забрать в семью</Button>
+                <SaveCard id={id}></SaveCard>
               </div>
             </div>
           </div>

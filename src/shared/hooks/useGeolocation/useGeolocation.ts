@@ -1,70 +1,43 @@
-import { useEffect, useState } from 'react';
-import { useGeolocated } from 'react-geolocated';
-import axios from 'axios';
+import { useEffect } from 'react';
 
-interface Geolocation {
-  latitude: number;
-  longitude: number;
-  accuracy: number;
-}
+import { setGeolocation, setError } from './geolocationSlice';
+import { useGetAddressQuery } from './geolocationApi'; 
+import { useAppDispatch } from '../useAppDispatch';
+import { useAppSelector } from '../useAppSelector';
+ const useGeolocation = () => {
+  const dispatch = useAppDispatch();
+  const geolocation = useAppSelector((state) => state.geolocation.geolocation);
+  const error = useAppSelector((state) => state.geolocation.error);
+  
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      dispatch(setError('Geolocation is not supported by your browser'));
+      return;
+    }
 
-interface Address {
-  road?: string;
-  city?: string;
-  state?: string;
-  country?: string;
-  postalCode?: string;
-}
+    const onSuccess = (position: GeolocationPosition) => {
+      const { latitude, longitude, accuracy } = position.coords;
+      dispatch(setGeolocation({ latitude, longitude, accuracy }));
+    };
 
-const useGeolocation = () => {
-  const [address, setAddress] = useState<Address | null>(null);
-  const [error, setError] = useState<string | null>(null);
+    const onError = (error: GeolocationPositionError) => {
+      dispatch(setError(error.message));
+    };
 
-  const { coords, isGeolocationAvailable, isGeolocationEnabled } =
-    useGeolocated({
-      positionOptions: {
-        enableHighAccuracy: true,
-      },
-      userDecisionTimeout: 5000,
-    });
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+  }, [dispatch]);
+
+  const { data: address, error: addressError } = useGetAddressQuery(
+    { lat: geolocation?.latitude || 0, lon: geolocation?.longitude || 0 },
+    { skip: !geolocation }
+  );
 
   useEffect(() => {
-    if (!isGeolocationAvailable) {
-      setError('Geolocation is not supported by your browser');
-      return;
+    if (addressError) {
+      dispatch(setError('Failed to fetch address'));
     }
+  }, [addressError, dispatch]);
 
-    if (!isGeolocationEnabled) {
-      setError('Geolocation is not enabled');
-      return;
-    }
-
-    if (coords) {
-      const { latitude, longitude } = coords;
-
-      const fetchAddress = async () => {
-        try {
-          const response = await axios.get(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-          );
-          const data = response.data.address;
-          setAddress({
-            road: data.road,
-            city: data.city,
-            state: data.state,
-            country: data.country,
-            postalCode: data.postcode,
-          });
-        } catch (error) {
-          setError('Failed to fetch address');
-        }
-      };
-
-      fetchAddress();
-    }
-  }, [coords, isGeolocationAvailable, isGeolocationEnabled]);
-
-  return { geolocation: coords, address, error };
+  return { geolocation, address, error: error || addressError };
 };
-
-export default useGeolocation;
+export default useGeolocation
