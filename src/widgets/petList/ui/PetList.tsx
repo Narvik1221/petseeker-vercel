@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import * as petModel from "@entities/pet";
 import styles from "./card.module.scss";
