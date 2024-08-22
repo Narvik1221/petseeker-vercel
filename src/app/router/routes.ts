@@ -5,12 +5,21 @@ import {
   ADD_PET_CARD,
   PROFILE,
   PET_CARD,
+  FAVORITE_ROUTE,
+  PROFILE_EDIT,
+  FAVORITES,
+  SETTINGS,
+  ADD_SHELTER,
 } from "./consts";
 import { Main } from "@/pages/main";
 import { Auth } from "@pages/auth";
 import { Profile } from "@pages/profile";
 import { AddPetCard } from "@pages/addPetCard";
 import { PetCardPage } from "@pages/petCardPage";
+import { ProfileEdit } from "@pages/profileEdit";
+import { AddShelter } from "@/pages/addShelter";
+import { Favorites } from "@pages/favorites";
+import { SettingsPage } from "@pages/settingsPage";
 export const authRoutes = [
   {
     path: ADD_PET_CARD,
@@ -19,6 +28,23 @@ export const authRoutes = [
   {
     path: PROFILE,
     Component: Profile,
+  },
+  {
+    path: FAVORITES,
+    Component: Favorites,
+  },
+  {
+    path: PROFILE_EDIT,
+    Component: ProfileEdit,
+  },
+
+  {
+    path: SETTINGS,
+    Component: SettingsPage,
+  },
+  {
+    path: ADD_SHELTER,
+    Component: AddShelter,
   },
 ];
 
@@ -37,7 +63,7 @@ export const publicRoutes = [
   },
 
   {
-    path: `PET_CARD ${"/:id"}`,
+    path: `${PET_CARD}/:id`,
     Component: PetCardPage,
   },
 ];

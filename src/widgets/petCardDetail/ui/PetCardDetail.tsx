@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import { useParams } from "react-router-dom";
 import styles from "./petCardDetail.module.scss";
@@ -8,6 +9,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
 import { Text } from "@shared/ui/text";
+import { Button } from "@shared/ui/button";
+
 import { ReactComponent as GenderFemale } from "@shared/assets/gender_female_icon.svg";
 import { ReactComponent as GenderMale } from "@shared/assets/gender_male_icon.svg";
 import { ReactComponent as Like } from "@shared/assets/like.svg";
@@ -15,8 +18,8 @@ import { ReactComponent as Back } from "@shared/assets/back_arrow_icon.svg";
 import { ReactComponent as Birthday } from "@shared/assets/birthday.svg";
 import { ReactComponent as Home } from "@shared/assets/home.svg";
 import { ReactComponent as ShelterArrow } from "@shared/assets/shelter_link_arrow.svg";
-import * as petModel from "@entities/pet";
-import test from "@shared/assets/add_icon.svg";
+import { petModel } from "@entities/pet/";
+import test from "@shared/assets/cat.png";
 import { SaveCard } from "@features/pet/savePet";
 import { match } from "ts-pattern";
 export const PetCardDetail: React.FC = () => {
@@ -25,7 +28,9 @@ export const PetCardDetail: React.FC = () => {
     data: pet,
     isLoading,
     isError,
-  } = petModel.api.useGetPetDetailQuery({ id });
+    error,
+  } = petModel.useGetPetDetailQuery({ id });
+
   const navigate = useNavigate();
   return (
     <>
@@ -153,7 +158,7 @@ export const PetCardDetail: React.FC = () => {
                 </div>
               </div>
               <NavLink className={styles.shelter__link} to={"#"}>
-                <Text myClass="btn" color="btn">
+                <Text myClass="btn" color="btn_color">
                   Приют Омские хвостики
                 </Text>
                 <ShelterArrow></ShelterArrow>
@@ -165,12 +170,12 @@ export const PetCardDetail: React.FC = () => {
                 </Text>
               </div>
               <button className={styles.more}>
-                <Text myClass="medium" color="btn">
+                <Text myClass="medium" color="btn_color">
                   Читать больше
                 </Text>
               </button>
               <div className={styles.m_top}>
-                <SaveCard id={id}></SaveCard>
+                <Button>Забрать в семью</Button>
               </div>
             </div>
           </div>

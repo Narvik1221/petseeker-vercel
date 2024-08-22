@@ -4,22 +4,28 @@ import {
   MAIN_ROUTE,
   REGISTRATION_ROUTE,
   ADD_PET_CARD,
+  FAVORITE_ROUTE,
+  PROFILE,
+  FAVORITES,
 } from "@app/router/consts";
 import { ReactComponent as MainIcon } from "@shared/assets/main_icon.svg";
 import { ReactComponent as ProfileIcon } from "@shared/assets/profile_icon.svg";
 import { ReactComponent as FavoriteIcon } from "@shared/assets/favorite_icon.svg";
 import { ReactComponent as AddIcon } from "@shared/assets/add_icon.svg";
+import { useAppSelector } from "@shared/hooks/useAppSelector";
 import styles from "./navbar.module.scss";
 const Navbar: React.FC = () => {
+  const token = useAppSelector((state) => state.user.auth);
   const activeMainIcon =
     location.pathname === MAIN_ROUTE ? styles.active_icon : "";
   const activeMainText =
     location.pathname === MAIN_ROUTE ? styles.active_text : "";
-
   const activeAddIcon =
     location.pathname === ADD_PET_CARD ? styles.active_icon : "";
   const activeAddText =
     location.pathname === ADD_PET_CARD ? styles.active_text : "";
+
+  const profileRoute = token ? PROFILE : REGISTRATION_ROUTE;
   return (
     <nav className={styles.navbar__container}>
       <div className={styles.navbar__list}>
@@ -37,13 +43,13 @@ const Navbar: React.FC = () => {
           </div>
           <span className={activeAddText}> Объявления</span>
         </Link>
-        <Link className={styles.navbar__item} to={MAIN_ROUTE}>
+        <Link className={styles.navbar__item} to={FAVORITES}>
           <div className={styles.navbar__icon_container}>
             <FavoriteIcon />
           </div>
           Избранное
         </Link>
-        <Link className={styles.navbar__item} to={REGISTRATION_ROUTE}>
+        <Link className={styles.navbar__item} to={profileRoute}>
           <div className={styles.navbar__icon_container}>
             <ProfileIcon />
           </div>

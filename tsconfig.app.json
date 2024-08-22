@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "checkJs": false,
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2020",
@@ -34,5 +33,5 @@
       "@app/*": ["./src/app/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "src/widgets/addPetCardWidget/ui/.tsx"]
 }

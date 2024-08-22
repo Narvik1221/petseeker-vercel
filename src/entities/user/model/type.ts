@@ -3,12 +3,15 @@ export type User = {
   phoneNumber: string;
 };
 export type UserState = {
-  token: string | null;
   user: User | null;
   phoneNumber: string;
   name: string;
   code: string;
   isConfirm: boolean;
+  auth: boolean | null;
+
+  profileData: Record<string, any>;
+  profile_image: File;
 };
 
 export type LoginResponse = {
@@ -28,4 +31,7 @@ export type ConfirmRequest = {
 export type ConfirmResponse = {
   token: string;
   message: string;
+};
+export type UploadImageRequest = {
+  formData: FormData;
 };

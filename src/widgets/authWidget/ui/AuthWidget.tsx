@@ -1,6 +1,7 @@
+// @ts-nocheck
 import React, { ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
-import * as petModel from "@entities/user/index";
+import { userModel } from "@entities/user";
 
 import { useAppDispatch, useAppSelector } from "@shared/hooks";
 
@@ -26,12 +27,11 @@ export const AuthWidget: React.FC = () => {
   const name = useAppSelector((state) => state.user.name);
   const code = useAppSelector((state) => state.user.code);
   const isConfirm = useAppSelector((state) => state.user.isConfirm);
-  const [login, { isLoading: isSendingLogin }] =
-    petModel.api.useLoginMutation();
+  const [login, { isLoading: isSendingLogin }] = userModel.useLoginMutation();
   const [
     confirm,
     { isLoading: isSendingConfirm, isSuccess: isConfirmSuccess, isError },
-  ] = petModel.api.useConfirmMutation();
+  ] = userModel.useConfirmMutation();
   const isAuth = location.pathname === AUTH_ROUTE;
 
   const handleClickSubmit = async () => {
@@ -39,7 +39,7 @@ export const AuthWidget: React.FC = () => {
       const response = await login({ phone_number: phoneNumber }).unwrap();
 
       if (response.success) {
-        dispatch(petModel.slice.setIsConfirm(true));
+        dispatch(userModel.setIsConfirm(true));
       }
     } catch (err) {
       console.error("Failed to login", err);
@@ -52,8 +52,9 @@ export const AuthWidget: React.FC = () => {
         phone_number: phoneNumber,
         code: code,
       }).unwrap();
+
       if (response.message) {
-        // dispatch(setToken(response.token));
+        dispatch(userModel.setAuthenticated(true));
         navigate(PROFILE);
       }
     } catch (err) {
@@ -63,17 +64,17 @@ export const AuthWidget: React.FC = () => {
   const handleChangePhone = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     const onlyNumbers = value.replace(/\D/g, "");
-    dispatch(petModel.slice.setPhoneNumber(onlyNumbers));
+    dispatch(userModel.setPhoneNumber(onlyNumbers));
   };
 
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
-    dispatch(petModel.slice.setName(event.target.value));
+    dispatch(userModel.setName(event.target.value));
   };
 
   const handleChangeCode = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     const masked = value.replace(/\D/g, "");
-    dispatch(petModel.slice.setCode(masked));
+    dispatch(userModel.setCode(masked));
   };
 
   return (

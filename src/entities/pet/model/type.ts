@@ -41,4 +41,62 @@ export type PetState = {
   loading: boolean;
   error: string | null;
   activeButton?: string | null;
+  openFilters: boolean;
+  step: number;
+  data: Record<string, any>;
+  historySearch: string[];
+  searchOnFocus: boolean;
+  filters: Record<string, any>;
+  announcmentType: AnnouncmentType;
+  images: File[];
+  ids: number[];
+  favoriteFilters: Record<string, any>;
+  previewUrl: string;
+  addPetUrl: string;
+};
+export const announcmentValues = {
+  private: "/api/private-announcement/create/",
+  shelter: "/api/shelter-announcement/create/",
+  message: "message",
+} as const;
+
+export type AnnouncmentType =
+  (typeof announcmentValues)[keyof typeof announcmentValues];
+
+export type UploadImageRequest = {
+  id: string;
+  formData: FormData;
+};
+
+export type FormDataType = {
+  pet_type: string;
+  name: string;
+  gender: string;
+  allergenicity: string;
+  fatness: string;
+  weight: string;
+  breed: string;
+  age: string;
+  wool_type: string;
+  sterilization: string;
+  vaccinations: string;
+  address: string;
+  description: string;
+  status: string;
+  dimmensions: string;
+  weigth: string;
+  contacts: string;
+  color: string;
+  state: string;
+  health_issues: string;
+};
+
+export type FilterState = {
+  pet_type: string;
+  male: string;
+  age: string;
+  fatness: string;
+  health__issues: string;
+  wool_type: string;
+  allergenicity: string;
 };
