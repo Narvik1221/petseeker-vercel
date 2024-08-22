@@ -1,2 +1,2 @@
 // @ts-nocheck
-export { AddPetCard } from "./sddPetCard";
+export { AddPetCard } from "./AddPetCard";
