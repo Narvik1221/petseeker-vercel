@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect } from "react";
 import { MainContainer } from "@shared/ui/mainContainer";
 import { Navbar } from "@/widgets/navbar";

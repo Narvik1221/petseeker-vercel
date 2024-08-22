@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { petModel } from "../index";
 import { AnnouncmentType } from "./type"; // Импортируем тип

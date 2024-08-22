@@ -8,7 +8,6 @@ import { Select } from "@shared/ui/select";
 import { Form } from "@shared/ui/form";
 import { Button } from "@shared/ui/button";
 import { useTranslation } from "react-i18next";
-
 import { Text } from "@shared/ui/text";
 import styles from "./petCardForm.module.scss";
 import { ReactComponent as Back } from "@shared/assets/back_arrow_icon.svg";
