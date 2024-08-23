@@ -18,4 +18,14 @@ export default defineConfig({
     },
   },
   plugins: [react(), svgr()],
+
+  server: {
+    proxy: {
+      "/api": {
+        target: process.env.VITE_APP_URL,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
 });
