@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "http://147.45.158.159/:path*"
+      "destination": "${env:VITE_APP_URL}/:path*"
     }
   ]
 }
