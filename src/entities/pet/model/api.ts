@@ -5,7 +5,7 @@ import { buildQueryString } from "@/shared/hooks/buildQueryString"; // Импо�
 export const petsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getPets: builder.query<Pet[], { pet_type?: string; male?: string }>({
-      query: (params) => buildQueryString("/search-announcement/", params),
+      query: (params) => buildQueryString("/api/search-announcement/", params),
     }),
     getPetDetail: builder.query<PetDetail, { id: string }>({
       query: (params) =>
