@@ -5,7 +5,7 @@ import { buildQueryString } from "@/shared/hooks/buildQueryString"; // Импо�
 export const petsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getPets: builder.query<Pet[], { pet_type?: string; male?: string }>({
-      query: (params) => buildQueryString("/api/search-announcement/", params),
+      query: (params) => buildQueryString("/search-announcement/", params),
     }),
     getPetDetail: builder.query<PetDetail, { id: string }>({
       query: (params) =>
@@ -38,7 +38,7 @@ export const petsApi = baseApi.injectEndpoints({
       invalidatesTags: ["Favorites"],
     }),
     getFavorites: builder.query<Pet[], { pet_type?: string }>({
-      query: (params) => buildQueryString("/api/favourites/", params),
+      query: (params) => buildQueryString("/favourites/", params),
       providesTags: ["Favorites"],
     }),
     uploadImage: builder.mutation<string, UploadImageRequest>({
