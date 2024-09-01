@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://147.45.158.159/api/$1"
+      "destination": "https://petseeker.ru:8443/api/$1"
     }
   ]
 }
