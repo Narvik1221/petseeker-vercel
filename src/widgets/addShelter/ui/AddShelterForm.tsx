@@ -1,7 +1,5 @@
-// @ts-nocheck
 import React, { ChangeEvent } from "react";
 import { useForm, SubmitHandler, ControllerRenderProps } from "react-hook-form";
-
 import { useTranslation } from "react-i18next";
 import { shelterModel } from "@/entities/shelter";
 import { Text } from "@shared/ui/text";
@@ -9,7 +7,7 @@ import styles from "./AddShelter.module.scss";
 import { ReactComponent as Back } from "@shared/assets/back_arrow_icon.svg";
 import { useAppDispatch } from "@/shared/hooks";
 import { useAppSelector } from "@/shared/hooks";
-import { PROFILE } from "@/app/router/consts";
+import { SHELTER, PROFILE } from "@/app/router/consts";
 import { useNavigate } from "react-router-dom";
 import { match } from "ts-pattern";
 import { AddressForm } from "./AddressForm";
@@ -24,14 +22,12 @@ export const AddShelterForm: React.FC = () => {
   const step = useAppSelector((state) => state.shelter.step);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const storedImages = useAppSelector((state) => state.pets.images);
+  const storedImages = useAppSelector((state) => state.shelter.images);
   const [addShelter, { isLoading, error: errorMessage }] =
     shelterModel.useAddShelterMutation();
 
-  const textSubmitButton = isLoading ? t("loading") : t("create");
-
   const [uploadImage, { isLoading: isUploadImageLoading }] =
-    shelterModel.useUploadImageMutation();
+    shelterModel.useUploadAvatarMutation();
   const formData = useAppSelector((state) => state.shelter.data);
 
   const {
@@ -39,12 +35,12 @@ export const AddShelterForm: React.FC = () => {
     handleSubmit,
     register,
     getValues,
-
+    setValue,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
       address: formData.address,
-      contacts: formData.address,
       description: formData.address,
       inn: formData.inn,
       name: formData.name,
@@ -75,8 +71,12 @@ export const AddShelterForm: React.FC = () => {
     try {
       const response = await addShelter(getValues()).unwrap();
 
-      handleUploadStoredImages(response?.id);
-      navigate(PROFILE);
+      if (storedImages.length !== 0) {
+        handleUploadStoredImages(response?.id);
+      } else {
+        reset();
+        navigate(SHELTER);
+      }
     } catch (error) {
       console.error(errorMessage);
     }
@@ -85,10 +85,12 @@ export const AddShelterForm: React.FC = () => {
   const handleUploadStoredImages = async (id: string) => {
     if (storedImages.length !== 0) {
       const formData = new FormData();
-      storedImages.forEach((file) => formData.append("files", file));
+      storedImages.forEach((file) => formData.append("images", file));
       try {
         const response = await uploadImage({ id: id, formData }).unwrap();
+
         dispatch(shelterModel.clearImages());
+        navigate(SHELTER);
       } catch (error) {
         console.error("Ошибка загрузки изображения:", error);
       }
@@ -116,6 +118,8 @@ export const AddShelterForm: React.FC = () => {
         {match(step)
           .with(1, () => (
             <DocumentsForm
+              t={t}
+              errors={errors}
               control={control}
               register={register}
               handleNext={handleNext}
@@ -125,6 +129,8 @@ export const AddShelterForm: React.FC = () => {
           ))
           .with(2, () => (
             <NameForm
+              t={t}
+              errors={errors}
               control={control}
               register={register}
               handleNext={handleNext}
@@ -133,6 +139,9 @@ export const AddShelterForm: React.FC = () => {
           ))
           .with(3, () => (
             <ContactsForm
+              setValue={setValue}
+              t={t}
+              errors={errors}
               getValues={getValues}
               control={control}
               handleNext={handleNext}
@@ -142,6 +151,8 @@ export const AddShelterForm: React.FC = () => {
           ))
           .with(4, () => (
             <AddressForm
+              t={t}
+              errors={errors}
               control={control}
               register={register}
               handleNext={handleNext}
@@ -156,10 +167,13 @@ export const AddShelterForm: React.FC = () => {
           ))
           .with(6, () => (
             <DescriptionForm
+              t={t}
+              errors={errors}
               control={control}
               register={register}
               handleNext={handleNext}
               onSubmitForm={handleSubmit(onSubmitForm)}
+              isLoading={isUploadImageLoading}
             />
           ))
 

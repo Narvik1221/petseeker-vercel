@@ -28,11 +28,15 @@
   aspect-ratio: 1;
   margin-bottom: 4px;
   > img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    object-position: center;
   }
 }
 
 .card__like_container {
+  align-items: baseline;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -62,8 +66,13 @@
   @media (min-width: 412px) {
     max-height: 24px;
   }
+  > * {
+    color: white !important;
+  }
 }
-
+.status_red {
+  background-color: var(--primary-red);
+}
 .card__content {
   display: flex;
   flex-direction: column;

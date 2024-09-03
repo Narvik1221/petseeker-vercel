@@ -27,4 +27,7 @@ export type InfoFormProps = {
     e: ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps<any, string>
   ) => void;
+  t?: any;
+  errors?: any;
+  isLoading?: boolean;
 };

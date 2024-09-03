@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import classNames from "classnames";
 import styles from "./button.module.scss";
@@ -13,6 +12,7 @@ export type ButtonProps = {
   isSmall?: boolean;
   name?: string;
   value?: string | boolean;
+  isLoading?: boolean;
 };
 
 export const Button: React.FC<ButtonProps> = ({
@@ -25,6 +25,7 @@ export const Button: React.FC<ButtonProps> = ({
   isSmall = false,
   name,
   value,
+  isLoading,
 }) => {
   const buttonClass = classNames({
     [styles.small]: isSmall,
@@ -32,6 +33,7 @@ export const Button: React.FC<ButtonProps> = ({
     [styles.active]: !isDefault,
     [styles.auth_default]: isDefault && isAuthButton,
     [styles.auth_active]: !isDefault && isAuthButton,
+    [styles.active_loading]: isLoading && !isDefault,
   });
 
   return (

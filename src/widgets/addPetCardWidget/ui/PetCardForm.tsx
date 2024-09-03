@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { petModel } from "@entities/pet";
@@ -8,6 +7,7 @@ import { Select } from "@shared/ui/select";
 import { Form } from "@shared/ui/form";
 import { Button } from "@shared/ui/button";
 import { useTranslation } from "react-i18next";
+
 import { Text } from "@shared/ui/text";
 import styles from "./petCardForm.module.scss";
 import { ReactComponent as Back } from "@shared/assets/back_arrow_icon.svg";
@@ -37,8 +37,6 @@ export const PetCardForm: React.FC = () => {
     petModel.useAddPetCardMutation();
   const { data: petTypes = [], isLoading: petTypesLoading } =
     petModel.useGetPetTypesQuery();
-  const textSubmitButton = isLoading ? t("loading") : t("create");
-  const onSubmit = async (data) => {};
 
   // const { data: petTypes = [], isLoading: petTypesLoading } =
   //   petModel.useGetPetTypesQuery();
@@ -46,25 +44,33 @@ export const PetCardForm: React.FC = () => {
     petModel.useUploadImageMutation();
   const formData = useAppSelector((state) => state.pets.data);
 
-  const { control, handleSubmit, register, getValues, setValue, watch, reset } =
-    useForm({
-      defaultValues: {
-        pet_type: formData.pet_type,
-        name: formData.name,
-        gender: formData.gender,
-        allergenicity: formData.allergenicity,
-        fatness: formData.fatness,
-        weight: formData.weight,
-        breed: formData.breed,
-        age: formData.age,
-        wool_type: formData.wool_type,
-        sterilization: formData.sterilization,
-        // health_issues: formData.health_issues,
-        vaccinations: formData.vaccinations,
-        address: formData.address,
-        description: formData.description,
-      },
-    });
+  const {
+    control,
+    handleSubmit,
+    register,
+    getValues,
+    setValue,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      pet_type: formData.pet_type,
+      name: formData.name,
+      gender: formData.gender,
+      allergenicity: formData.allergenicity,
+      dimensions: formData.dimensions,
+      weigth: formData.weigth,
+      breed: formData.breed,
+      age: formData.age,
+      wool_type: formData.wool_type,
+      sterilization: formData.sterilization,
+      // health_issues: formData.health_issues,
+      vaccinations: formData.vaccinations,
+      address: formData.address,
+      description: formData.description,
+    },
+  });
   useEffect(() => {
     const savedAnnouncmentFormData = JSON.parse(
       localStorage.getItem("announcmentFormData") || "{}"
@@ -84,6 +90,7 @@ export const PetCardForm: React.FC = () => {
   const handleSave = () => {
     navigate(MAIN_ROUTE);
     onChangeForm(getValues());
+    handleBack();
     localStorage.setItem("announcmentFormData", JSON.stringify(getValues()));
   };
 
@@ -97,24 +104,21 @@ export const PetCardForm: React.FC = () => {
   };
   const onSubmitForm = async () => {
     try {
+      // временно
       const newPetCard = {
         contacts: "0",
-        dimmensions: "0",
-        health_issues: "string",
-        state: "Активный",
-        status: "Нашел",
-        weigth: "0",
-        breed: "Бигль",
+        state: petModel.announcmentState.active,
         ...getValues(),
       };
-      console.log(addPetCardUrl);
+      newPetCard.contacts = "0";
+      newPetCard.state = petModel.announcmentState.active;
+      console.log(newPetCard);
       const response = await addPetCard({
         newPetCard,
         url: addPetCardUrl,
       }).unwrap();
 
       handleUploadStoredImages(response?.id);
-      navigate(MAIN_ROUTE);
     } catch (error) {
       console.error(errorMessage);
     }
@@ -123,9 +127,14 @@ export const PetCardForm: React.FC = () => {
   const handleUploadStoredImages = async (id: string) => {
     if (storedImages.length !== 0) {
       const formData = new FormData();
-      storedImages.forEach((file) => formData.append("files", file));
+      storedImages.forEach((file) => formData.append("images", file));
       try {
         const response = await uploadImage({ id: id, formData }).unwrap();
+
+        dispatch(petModel.setFormData({}));
+        localStorage.removeItem("announcmentFormData");
+        reset();
+        navigate(MAIN_ROUTE);
         dispatch(petModel.clearImages());
       } catch (error) {
         console.error("Ошибка загрузки изображения:", error);
@@ -146,9 +155,11 @@ export const PetCardForm: React.FC = () => {
           </button>
         </div>
         {match(step)
-          .with(1, () => <TypeForm />)
+          .with(1, () => <TypeForm setValue={setValue} />)
           .with(2, () => (
             <InfoForm
+              t={t}
+              errors={errors}
               control={control}
               register={register}
               handleNext={handleNext}
@@ -157,8 +168,10 @@ export const PetCardForm: React.FC = () => {
           ))
           .with(3, () => (
             <CharacteristicForm1
+              t={t}
               getValues={getValues}
               control={control}
+              errors={errors}
               register={register}
               handleNext={handleNext}
               onChangeForm={handleSubmit(onChangeForm)}
@@ -166,16 +179,20 @@ export const PetCardForm: React.FC = () => {
           ))
           .with(4, () => (
             <CharacteristicForm2
+              t={t}
               watch={watch}
               getValues={getValues}
               register={register}
               onChangeForm={handleSubmit(onChangeForm)}
               setValue={setValue}
+              errors={errors}
             />
           ))
           .with(5, () => (
             <CharacteristicForm3
+              t={t}
               control={control}
+              errors={errors}
               register={register}
               handleNext={handleNext}
               onChangeForm={handleSubmit(onChangeForm)}
@@ -183,7 +200,9 @@ export const PetCardForm: React.FC = () => {
           ))
           .with(6, () => (
             <CharacteristicForm4
+              t={t}
               control={control}
+              errors={errors}
               register={register}
               handleNext={handleNext}
               onChangeForm={handleSubmit(onChangeForm)}
@@ -191,7 +210,9 @@ export const PetCardForm: React.FC = () => {
           ))
           .with(7, () => (
             <DescriptionForm
+              t={t}
               control={control}
+              errors={errors}
               register={register}
               handleNext={handleNext}
               onChangeForm={handleSubmit(onChangeForm)}
@@ -199,17 +220,20 @@ export const PetCardForm: React.FC = () => {
           ))
           .with(8, () => (
             <ImagesForm
+              t={t}
               handleNext={handleNext}
               onChangeForm={handleSubmit(onChangeForm)}
             />
           ))
           .with(9, () => (
             <AddressForm
+              t={t}
               control={control}
+              errors={errors}
               register={register}
               handleNext={handleNext}
-              onSubmitForm={onSubmitForm}
-              onChangeForm={handleSubmit(onChangeForm)}
+              onSubmitForm={handleSubmit(onSubmitForm)}
+              isLoading={isUploadImageLoading}
             />
           ))
           .otherwise(() => null)}

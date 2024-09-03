@@ -1,16 +1,34 @@
-// @ts-nocheck
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { petModel } from "../index";
-import { AnnouncmentType } from "./type"; // Импортируем тип
 
 const initialFilterState: petModel.FilterState = {
   pet_type: undefined,
   male: undefined,
   age: undefined,
-  fatness: undefined,
+  dimensions: undefined,
   health__issues: undefined,
   wool_type: undefined,
   allergenicity: undefined,
+};
+const initialFormDataState: petModel.FormDataType = {
+  pet_type: undefined,
+  name: undefined,
+  gender: undefined,
+  allergenicity: undefined,
+  dimensions: undefined,
+  weigth: undefined,
+  breed: undefined,
+  age: undefined,
+  wool_type: undefined,
+  sterilization: undefined,
+  vaccinations: undefined,
+  address: undefined,
+  description: undefined,
+  status: undefined,
+  contacts: undefined,
+  color: undefined,
+  state: undefined,
+  health_issues: undefined,
 };
 const initialState: petModel.PetState = {
   pets: [],
@@ -22,13 +40,12 @@ const initialState: petModel.PetState = {
   historySearch: [],
   searchOnFocus: false,
   step: 1,
-  announcmentType: "private",
-  data: {},
-  favoriteFilters: {},
+  data: initialFormDataState,
+  favoriteFilters: undefined,
   ids: [],
   images: [],
   previewUrl: "",
-  addPetUrl: "/api/private-announcement/create/",
+  addPetUrl: undefined,
 };
 
 const petsSlice = createSlice({
@@ -56,6 +73,9 @@ const petsSlice = createSlice({
         ...action.payload,
       };
     },
+    resetFavoriteFilters(state, action: PayloadAction<any>) {
+      state.favoriteFilters = action.payload;
+    },
     setHistorySearch(state, action: PayloadAction<string>) {
       if (
         !state.historySearch.includes(action.payload) &&
@@ -82,12 +102,10 @@ const petsSlice = createSlice({
     prevStep(state) {
       state.step -= 1;
     },
-    setFormData(state, action: PayloadAction<Record<string, any>>) {
+    setFormData(state, action: PayloadAction<petModel.FormDataType>) {
       state.data = { ...state.data, ...action.payload };
     },
-    setAnnouncmentType(state, action: PayloadAction<petModel.AnnouncmentType>) {
-      state.announcmentType = action.payload;
-    },
+
     addImages: (state, action: PayloadAction<File[]>) => {
       state.images = action.payload;
     },
@@ -112,32 +130,6 @@ const petsSlice = createSlice({
       state.addPetUrl = action.payload;
     },
   },
-  extraReducers: (builder) => {
-    builder.addMatcher(
-      petModel.petsApi.endpoints.getPets.matchPending,
-      (state) => ({
-        ...state,
-        loading: true,
-        error: null,
-      })
-    );
-    builder.addMatcher(
-      petModel.petsApi.endpoints.getPets.matchFulfilled,
-      (state, action: PayloadAction<petModel.Pet[]>) => ({
-        ...state,
-        pets: action.payload,
-        loading: false,
-      })
-    );
-    builder.addMatcher(
-      petModel.petsApi.endpoints.getPets.matchRejected,
-      (state, action) => ({
-        ...state,
-        error: action.error.message || "Failed to fetch cards",
-        loading: false,
-      })
-    );
-  },
 });
 export const {
   setActiveButton,
@@ -147,13 +139,13 @@ export const {
   setFormData,
   setFilters,
   resetFilters,
-  setAnnouncmentType,
   addImages,
   clearImages,
   setHistorySearch,
   setSearchOnFocus,
   loadHistoryFromStorage,
   setFavoriteFilters,
+  resetFavoriteFilters,
   removeFavorite,
   addFavorites,
   setPreviewUrl,

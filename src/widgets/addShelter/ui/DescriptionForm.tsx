@@ -6,10 +6,15 @@ import { Label } from "@shared/ui/label";
 import { Button } from "@shared/ui/button";
 import { TextArea } from "@/shared/ui/textArea";
 import { InfoFormProps } from "../model/type";
+import { Controller } from "react-hook-form";
 export const DescriptionForm: React.FC<InfoFormProps> = ({
   onSubmitForm,
-  register,
+  control,
+  errors,
+  t,
+  isLoading,
 }) => {
+  const textSubmitButton = isLoading ? "Загрузка" : "Далее";
   return (
     <div className={styles.container}>
       <div className={styles.top}>
@@ -20,17 +25,30 @@ export const DescriptionForm: React.FC<InfoFormProps> = ({
           <Label>
             <Text myClass="medium_big">Название</Text>
 
-            <TextArea
-              placeholder="Введите описание"
-              myClass="form_textArea"
-              register={register("description", { required: true })}
+            <Controller
+              name="description"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: t("fillInTheField"),
+              }}
+              render={({ field }) => (
+                <TextArea
+                  ref={field.ref}
+                  value={field.value}
+                  onChange={field.onChange}
+                  placeholder="Введите описание"
+                  myClass="form_textArea"
+                  errorMessage={errors.description?.message}
+                />
+              )}
             />
           </Label>
         </div>
 
         <div className={styles.bottom}>
           <Button isAuthButton={true} type="submit">
-            Далее
+            {textSubmitButton}
           </Button>
         </div>
       </form>
