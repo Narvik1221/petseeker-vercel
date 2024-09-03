@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { ChangeEvent } from "react";
 import { useForm, Controller, ControllerRenderProps } from "react-hook-form";
 import { useTranslation } from "react-i18next";

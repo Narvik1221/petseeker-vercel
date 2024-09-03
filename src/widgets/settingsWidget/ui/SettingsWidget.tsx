@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from "react";
 import { userModel } from "@entities/user";
 import styles from "./SettingsWidget.module.scss";

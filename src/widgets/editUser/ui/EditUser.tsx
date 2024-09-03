@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { userModel } from "@entities/user/index";

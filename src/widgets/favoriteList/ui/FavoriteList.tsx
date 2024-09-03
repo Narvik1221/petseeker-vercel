@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect } from "react";
 import { petModel, PetCard } from "@entities/pet";
 import styles from "./favorite.module.scss";

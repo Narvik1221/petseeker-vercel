@@ -1,1 +1,13 @@
-{}
+{
+  "files": [],
+  "compilerOptions": {
+    "types": ["vite-plugin-svgr/client", "jest", "node"],
+    "checkJs": false
+  },
+  "references": [
+    { "path": "./tsconfig.node.json" },
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ]
+}
