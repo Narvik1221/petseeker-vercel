@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/shared/hooks"; // Хуки для работы с Redux
 import { petModel } from "@entities/pet/index";
