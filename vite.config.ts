@@ -21,6 +21,21 @@ const manifestForPlugin: Partial<VitePWAOptions> = {
     start_url: "/",
     icons: [
       {
+        src: "./src/shared/assets/pwa58x58.png",
+        sizes: "58x58",
+        type: "image/png",
+      },
+      {
+        src: "./src/shared/assets/pwa72x72.png",
+        sizes: "72x72",
+        type: "image/png",
+      },
+      {
+        src: "./src/shared/assets/pwa87x87.png",
+        sizes: "87x87",
+        type: "image/png",
+      },
+      {
         src: "./src/shared/assets/pwa87x87.png",
         sizes: "87x87",
         type: "image/png",
