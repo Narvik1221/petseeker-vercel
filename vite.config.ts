@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import svgr from "@svgr/rollup";
 import dotenv from "dotenv";
-import { VitePWA } from "vite-plugin-pwa";
+
 dotenv.config();
 
 export default defineConfig({
@@ -19,22 +19,5 @@ export default defineConfig({
       "@app": path.resolve(__dirname, "./src/app"),
     },
   },
-  plugins: [
-    react(),
-    svgr(),
-    VitePWA({
-      registerType: "autoUpdate",
-      manifest: {
-        name: "PetSeeker",
-        short_name: "PetSeeker",
-        description:
-          "PetSeeker is an application that helps you find homes for animals",
-        theme_color: "#ffffff",
-        background_color: "#ffffff",
-        display: "standalone",
-        scope: "/",
-        start_url: "/",
-      },
-    }),
-  ],
+  plugins: [react(), svgr()],
 });
