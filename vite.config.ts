@@ -34,28 +34,6 @@ export default defineConfig({
         display: "standalone",
         scope: "/",
         start_url: "/",
-        icons: [
-          {
-            src: "./src/shared/assets/pwa87x87.png",
-            sizes: "87x87",
-            type: "image/png",
-          },
-          {
-            src: "./src/shared/assets/pwa120x120.png",
-            sizes: "120x120",
-            type: "image/png",
-          },
-          {
-            src: "./src/shared/assets/pwa180x180.png",
-            sizes: "180x180",
-            type: "image/png",
-          },
-          {
-            src: "./src/shared/assets/pwa1024x1024.png",
-            sizes: "1024x1024",
-            type: "image/png",
-          },
-        ],
       },
     }),
   ],
