@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 import { VitePWA, VitePWAOptions } from "vite-plugin-pwa";
 dotenv.config();
 
-const manifestForPlugin: Partial<VitePWAOptions> = {
+const manifestForPlugin: any = {
   registerType: "autoUpdate",
   manifest: {
     name: "PetSeeker",
